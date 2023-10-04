@@ -23,8 +23,8 @@ namespace ReportService.Controllers
         public async Task<IActionResult> CreateUserStatisticsRequest([FromBody] UserStatisticsRequest request)
         {
             var requestId = await _reportService.CreateUserStatisticsRequest(request);
+            
 
-            //
             //_reportService.ProcessReport(requestId); // если каждые 25% сохранять результат
             _reportService.DefaultProcessReport(requestId); // если просто подождать X секунд, и сохранить значение на сотке.
 
@@ -37,7 +37,7 @@ namespace ReportService.Controllers
         [HttpGet("info/{id}")]
         public async Task<IActionResult> GetRequestInfo(Guid id)
         {
-            var requestInfo = await _reportService.GetRequestInfo(id);
+            var requestInfo = await _reportService.GetRequestInfo(id); // каждый запрос получаем актуальную информацию по айди request с user_statistics
 
             if (requestInfo is null) return NotFound();
 

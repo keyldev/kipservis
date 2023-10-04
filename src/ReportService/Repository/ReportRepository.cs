@@ -13,10 +13,13 @@ namespace ReportService.Repository
             _dbContext = dbContext;
         }
 
-        public async Task AddUserStatisticsRequestAsync(ReportRequest request)
+        public async Task<Guid> AddUserStatisticsRequestAsync(ReportRequest request)
         {
             await _dbContext.UserStatisticsRequests.AddAsync(request);
+
             await _dbContext.SaveChangesAsync();
+
+            return request.Id;
 
         }
 
