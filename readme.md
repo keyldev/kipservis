@@ -2,6 +2,16 @@
 
 Использовался паттерн Repository и механизм Dependency Injection.
 
+### Настройка таймаута
+
+Согласно заданию, доступно в конфигурации приложения ([appsettings.json](/src/ReportService/appsettings.json)).
+
+```json
+{
+  "ReportTimeout":20000, // стоит 20 секунд таймаут
+}
+```
+
 ### Доступные эндпоинты
 
 1. ```POST /report/user_statistics```
