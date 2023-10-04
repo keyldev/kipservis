@@ -37,27 +37,11 @@ namespace ReportService.Controllers
         public async Task<IActionResult> GetRequestInfo(Guid id)
         {
             var requestInfo = await _reportService.GetRequestInfo(id); // каждый запрос получаем актуальную информацию по айди request с user_statistics
-            /*
-            if (requestInfo is null) return NotFound();
-
-            var progress = (int)((DateTime.UtcNow - requestInfo.CreatedAt).TotalMilliseconds / _reportTimeout * 100);
-            if (progress > 100)
-            {
-                requestInfo = await _reportService.GetRequestInfo(id);
-                progress = 100;
-            }
-            var response = new ReportInfoResponse
-            {
-                Id = requestInfo.Id,
-                Progress = progress,
-                Result = requestInfo.Result,
-            };
-
-            return Ok(response);*/
-
 
             if (requestInfo is not null)
             {
+                // если упал сервер, и сохраненный прогресс меньше сотни, значит при обращении к этому запросу, мы возобновим пуллинг запроса
+                // по просту говоря, запрос продолжится с места "сохранения" 
                 if(requestInfo.Progress < 100 && (DateTime.UtcNow - requestInfo.CreatedAt).TotalSeconds > _requestTimeout / 1000)
                 {
                     _reportService.ProcessReport(id);

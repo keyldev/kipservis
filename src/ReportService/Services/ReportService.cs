@@ -51,14 +51,13 @@ namespace ReportService.Services
             {
                 Debug.WriteLine($"Processing time limit {_processingTimeLimit}");
 
-                // если у нас упало приложение, и прогресс не сотка, тогда мы обнуляем всё по запросу и ставим его в очередь (если я правильно понял задание)
+                // если у нас упало приложение, и прогресс не сотка, тогда мы всё по запросу и ставим его в очередь (если я правильно понял задание)
                 if (reportRequest.Progress < 100 && (DateTime.UtcNow - reportRequest.CreatedAt).TotalSeconds > _requestTimeout / 1000)
                 {
-                    //reportRequest.Progress = 0; // 
                     reportRequest.CreatedAt = DateTime.UtcNow;
                 }
                 int previousProgress = reportRequest.Progress;
-                int progress = 0, currentProgress = 0; // kostyl 
+                int progress = 0, currentProgress = 0; // kostyl?
 
                 Debug.WriteLine($"progress is: {previousProgress}");
 
