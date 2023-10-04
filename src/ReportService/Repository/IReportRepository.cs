@@ -6,7 +6,7 @@ namespace ReportService.Repository
     {
         public Task<Guid> AddUserStatisticsRequestAsync(ReportRequest request);
         public Task<ReportRequest> GetRequestInfo(Guid id);
-        Task SaveRequestAsync(ReportRequest reportRequest);
+        public Task SaveRequestAsync(ReportRequest reportRequest);
 
     }
 }

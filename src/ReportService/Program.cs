@@ -21,9 +21,9 @@ namespace ReportService
             builder.Services.AddScoped<IReportService, Services.ReportService>(); // ругается на нейминг (проект называется также как и сервис)
             builder.Services.AddScoped<IReportRepository, ReportRepository>();
 
+
             builder.Services.AddDbContext<AppDbContext>(options =>
                     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 32))), ServiceLifetime.Singleton); // 
-
 
             var app = builder.Build();
 
