@@ -44,13 +44,11 @@ namespace ReportService.Services
         /// <param name="requestId">Id запроса</param>
         public async Task ProcessReport(Guid requestId)
         {
-            //await Task.Delay(_requestTimeout); // Здесь должна быть какая-то обработка запроса
             // здесь можно реализовать ту самую выборку данных по датам С и По.
+
             var reportRequest = await _reportRepository.GetRequestInfo(requestId);
             if (reportRequest is not null)
             {
-                Debug.WriteLine($"Processing time limit {_processingTimeLimit}");
-
                 // если у нас упало приложение, и прогресс не сотка, тогда мы всё по запросу и ставим его в очередь (если я правильно понял задание)
                 if (reportRequest.Progress < 100 && (DateTime.UtcNow - reportRequest.CreatedAt).TotalSeconds > _requestTimeout / 1000)
                 {
@@ -58,8 +56,6 @@ namespace ReportService.Services
                 }
                 int previousProgress = reportRequest.Progress;
                 int progress = 0, currentProgress = 0; // kostyl?
-
-                Debug.WriteLine($"progress is: {previousProgress}");
 
                 while (progress < 100)
                 {
@@ -80,7 +76,7 @@ namespace ReportService.Services
             }
 
         }
-        // дефолтный метод с делеем на X секунд, манипулирует с базой лишь когда проходит опр. время.
+        // дефолтный метод с делеем на X секунд, манипулирует с базой лишь когда проходит опр. время (request timeout).
         public async void DefaultProcessReport(Guid id)
         {
             await Task.Delay(_requestTimeout); // тут логика обработки запроса в 60к мс.
