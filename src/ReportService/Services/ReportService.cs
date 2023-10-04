@@ -42,10 +42,10 @@ namespace ReportService.Services
         /// Запускает процесс обработки запроса
         /// </summary>
         /// <param name="requestId">Id запроса</param>
-        public async void ProcessReport(Guid requestId)
+        public async Task ProcessReport(Guid requestId)
         {
             //await Task.Delay(_requestTimeout); // Здесь должна быть какая-то обработка запроса
-
+            // здесь можно реализовать ту самую выборку данных по датам С и По.
             var reportRequest = await _reportRepository.GetRequestInfo(requestId);
             if (reportRequest is not null)
             {
@@ -57,10 +57,16 @@ namespace ReportService.Services
                     //reportRequest.Progress = 0; // 
                     reportRequest.CreatedAt = DateTime.UtcNow;
                 }
-                int progress = reportRequest.Progress;
+                int previousProgress = reportRequest.Progress;
+                int progress = 0, currentProgress = 0; // kostyl 
+
+                Debug.WriteLine($"progress is: {previousProgress}");
+
                 while (progress < 100)
                 {
-                    progress = (int)((DateTime.UtcNow - reportRequest.CreatedAt).TotalMilliseconds / _requestTimeout * 100); // прогресс конвертируемый в проценты
+                    currentProgress = (int)((DateTime.UtcNow - reportRequest.CreatedAt).TotalMilliseconds / _requestTimeout * 100); // прогресс конвертируемый в проценты
+                    progress = currentProgress + previousProgress;
+
                     if (progress % 25 == 0) // каждые 25% записываем в БД
                     {
                         reportRequest.Progress = progress;

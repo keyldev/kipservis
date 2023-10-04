@@ -7,7 +7,7 @@ namespace ReportService.Services
 
         public Task<Guid> CreateUserStatisticsRequest(UserStatisticsRequest request);
         public Task<ReportRequest> GetRequestInfo(Guid id);
-        public void ProcessReport(Guid requestId);
+        public Task ProcessReport(Guid requestId);
         public void DefaultProcessReport(Guid requestId);
     }
 }
