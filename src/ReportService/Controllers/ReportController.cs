@@ -10,13 +10,13 @@ namespace ReportService.Controllers
     {
         private readonly IReportService _reportService;
         private readonly IConfiguration _configuration;
-        private readonly int _reportTimeout;
+        private readonly int _requestTimeout;
 
         public ReportController(IConfiguration configuration, IReportService reportService)
         {
             _reportService = reportService;
             _configuration = configuration;
-            _reportTimeout = _configuration.GetValue<int>("ReportTimeout", 60000);
+            _requestTimeout = _configuration.GetValue<int>("ReportTimeout", 60000);
         }
 
         [HttpPost("user_statistics")]
@@ -56,10 +56,9 @@ namespace ReportService.Controllers
             return Ok(response);*/
 
 
-            #region ЕСЛИ_ИСПОЛЬЗУЕТСЯ_МЕТОД_PROCESSREPORT
             if (requestInfo is not null)
             {
-                if(requestInfo.Progress < 100)
+                if(requestInfo.Progress < 100 && (DateTime.UtcNow - requestInfo.CreatedAt).TotalSeconds > _requestTimeout / 1000)
                 {
                     _reportService.ProcessReport(id);
                     requestInfo = await _reportService.GetRequestInfo(id);
@@ -74,7 +73,6 @@ namespace ReportService.Controllers
                 return Ok(response);
             }
             return NotFound();
-            #endregion
 
         }
     }
