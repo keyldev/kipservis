@@ -55,7 +55,7 @@ namespace ReportService.Services
                 // если у нас упало приложение, и прогресс не сотка, тогда мы обнуляем всё по запросу и ставим его в очередь (если я правильно понял задание)
                 if (reportRequest.Progress < 100 && (DateTime.UtcNow - reportRequest.CreatedAt).TotalSeconds > _requestTimeout / 1000)
                 {
-                    reportRequest.Progress = 0;
+                    //reportRequest.Progress = 0; // 
                     reportRequest.CreatedAt = DateTime.UtcNow;
                 }
                 int progress = reportRequest.Progress;
@@ -86,6 +86,7 @@ namespace ReportService.Services
             {
                 reportRequest.Progress = 100;
                 reportRequest.Result = "{\"user_id\": \"b28d0ced-8af5-4c94-8650-c7946241fd1a\", \"count_sign_in\": \"12\"}"; // любая сериализованная строка вместо этой.
+                                                                                                                             // или можно модифицировать модель так, чтобы была не строка а базовый класс информации
                 await _reportRepository.SaveRequestAsync(reportRequest); // отправляем на сохранение.
             }
 

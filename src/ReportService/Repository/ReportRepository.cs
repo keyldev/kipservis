@@ -28,21 +28,13 @@ namespace ReportService.Repository
 
         public async Task SaveRequestAsync(ReportRequest reportRequest)
         {
-            try
-            {
-                var request = await _dbContext.UserStatisticsRequests.FindAsync(reportRequest.Id);
-                request.Progress = reportRequest.Progress;
-                request.Result = reportRequest.Result;
 
+            var request = await _dbContext.UserStatisticsRequests.FindAsync(reportRequest.Id);
+            request.Progress = reportRequest.Progress;
+            request.Result = reportRequest.Result;
 
-                _dbContext.UserStatisticsRequests.Update(request);
-                await _dbContext.SaveChangesAsync();
-
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Exception " + ex.ToString());
-            }
+            _dbContext.UserStatisticsRequests.Update(request);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
