@@ -2,6 +2,8 @@
 
 Использовался паттерн Repository и механизм Dependency Injection.
 
+Для работы нужен <b>MySQL Server 8.0.32.</b>
+
 ### Настройка таймаута
 
 Согласно заданию, доступно в конфигурации приложения ([appsettings.json](/src/ReportService/appsettings.json)).
